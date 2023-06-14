@@ -2,26 +2,28 @@ package nl.han.oose.dea.controllers.dto.request;
 
 public class LoginRequestDTO {
 
-    private String gebruikersnaam, wachtwoord;
+    private String user, password;
 
-    public LoginRequestDTO(String gebruikersnaam, String wachtwoord) {
-        this.gebruikersnaam = gebruikersnaam;
-        this.wachtwoord = wachtwoord;
+    public LoginRequestDTO() {}
+
+    public LoginRequestDTO(String user, String password) {
+        this.user = user;
+        this.password = password;
     }
 
-    public String getGebruikersnaam() {
-        return gebruikersnaam;
+    public String getUser() {
+        return user;
     }
 
-    public void setGebruikersnaam(String gebruikersnaam) {
-        this.gebruikersnaam = gebruikersnaam;
+    public void setUser(String user) {
+        this.user = user;
     }
 
-    public String getWachtwoord() {
-        return wachtwoord;
+    public String getPassword() {
+        return password;
     }
 
-    public void setWachtwoord(String wachtwoord) {
-        this.wachtwoord = wachtwoord;
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

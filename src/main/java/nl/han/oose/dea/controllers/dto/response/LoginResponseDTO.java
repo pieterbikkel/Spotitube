@@ -2,21 +2,21 @@ package nl.han.oose.dea.controllers.dto.response;
 
 public class LoginResponseDTO {
 
-    private String gebruikersnaam, token;
+    private String user, token;
 
     public LoginResponseDTO() {}
 
     public LoginResponseDTO(String gebruikersnaam, String token) {
-        this.gebruikersnaam = gebruikersnaam;
+        this.user = gebruikersnaam;
         this.token = token;
     }
 
-    public String getGebruikersnaam() {
-        return gebruikersnaam;
+    public String getUser() {
+        return user;
     }
 
-    public void setGebruikersnaam(String gebruikersnaam) {
-        this.gebruikersnaam = gebruikersnaam;
+    public void setUser(String user) {
+        this.user = user;
     }
 
     public String getToken() {
