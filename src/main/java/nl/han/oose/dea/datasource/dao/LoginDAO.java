@@ -4,6 +4,7 @@ import jakarta.inject.Inject;
 import nl.han.oose.dea.controllers.dto.request.LoginRequestDTO;
 import nl.han.oose.dea.datasource.databaseConnection.ConnectionManager;
 import nl.han.oose.dea.datasource.exceptions.DatabaseConnectionException;
+import nl.han.oose.dea.datasource.exceptions.ForbiddenResourceException;
 import nl.han.oose.dea.datasource.exceptions.InvalidCredentialsException;
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -44,7 +45,7 @@ public class LoginDAO {
         ResultSet result = statement.executeQuery();
 
         if (!result.isBeforeFirst()) {
-            throw new InvalidCredentialsException();
+            throw new ForbiddenResourceException();
         }
         connectionManager.closeConnection();
 

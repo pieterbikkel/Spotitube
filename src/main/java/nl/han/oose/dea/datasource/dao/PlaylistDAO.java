@@ -25,12 +25,12 @@ public class PlaylistDAO {
         return new PlaylistsResponseDTO(playlists, playlistLength);
     }
 
-    public void editPlaylistName(PlaylistDTO playlist) throws SQLException {
+    public void editPlaylistName(PlaylistDTO playlist, int id) throws SQLException {
         connectionService.initConnection();
         var sql = "UPDATE playlist SET naam = ? WHERE playlistId = ?;";
         var preparedStatement = connectionService.getConnection().prepareStatement(sql);
         preparedStatement.setString(1, playlist.getName());
-        preparedStatement.setInt(2, playlist.getId());
+        preparedStatement.setInt(2, id);
         preparedStatement.executeUpdate();
         connectionService.closeConnection();
     }

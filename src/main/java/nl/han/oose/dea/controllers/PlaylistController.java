@@ -24,7 +24,7 @@ public class PlaylistController {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllPlaylists(@QueryParam("token") String token) {
+    public Response getAllPlaylists(@QueryParam("token") String token) throws Exception {
         try {
             return Response
                     .status(Response.Status.OK)
@@ -32,29 +32,30 @@ public class PlaylistController {
                     .build();
         } catch (Exception e) {
             e.printStackTrace();
-            throw new BadRequestException();
+            throw e;
         }
     }
 
     @GET
     @Path("/{playlist}/tracks")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getTracksFromPlaylist(@PathParam("playlist") int playlistId, @QueryParam("token") String token) {
+    public Response getTracksFromPlaylist(@PathParam("playlist") int playlistId, @QueryParam("token") String token) throws Exception {
         try {
+            this.loginService.verifyToken(token);
             return Response
                     .status(Response.Status.OK)
                     .entity(trackDAO.getAllTracksFromPlaylist(playlistId))
                     .build();
         } catch (Exception e) {
             e.printStackTrace();
-            throw new BadRequestException();
+            throw e;
         }
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response addPlaylist(PlaylistDTO playlist, @QueryParam("token") String token) {
+    public Response addPlaylist(PlaylistDTO playlist, @QueryParam("token") String token) throws Exception {
         try {
             playlistDAO.addPlaylist(token, playlist);
             return Response
@@ -63,7 +64,7 @@ public class PlaylistController {
                     .build();
         } catch (Exception e) {
             e.printStackTrace();
-            throw new BadRequestException();
+            throw e;
         }
     }
 
@@ -71,8 +72,9 @@ public class PlaylistController {
     @Path("/{id}/tracks")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response addTrackToPlaylist(@QueryParam("token") String token, @PathParam("id") int playlistId, TrackResponseDTO track) {
+    public Response addTrackToPlaylist(@QueryParam("token") String token, @PathParam("id") int playlistId, TrackResponseDTO track) throws Exception {
         try {
+            this.loginService.verifyToken(token);
             trackDAO.addTrackToPlaylist(playlistId, track);
             return Response
                     .status(Response.Status.OK)
@@ -80,31 +82,33 @@ public class PlaylistController {
                     .build();
         } catch (Exception e) {
             e.printStackTrace();
-            throw new BadRequestException();
+            throw e;
         }
     }
 
     @DELETE
     @Path("/{playlist}/tracks/{track}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteTrackFromPlaylist(@QueryParam("token") String token, @PathParam("playlist") int playlistId, @PathParam("track") int trackId) {
+    public Response deleteTrackFromPlaylist(@QueryParam("token") String token, @PathParam("playlist") int playlistId, @PathParam("track") int trackId) throws Exception {
         try {
-                trackDAO.deleteTrackFromPlaylist(playlistId, trackId);
+            this.loginService.verifyToken(token);
+            trackDAO.deleteTrackFromPlaylist(playlistId, trackId);
             return Response
                     .status(Response.Status.OK)
                     .entity(trackDAO.getAllTracksFromPlaylist(playlistId))
                     .build();
         } catch (Exception e) {
             e.printStackTrace();
-            throw new BadRequestException();
+            throw e;
         }
     }
 
     @DELETE
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deletePlaylist(@PathParam("id") int id, @QueryParam("token") String token) {
+    public Response deletePlaylist(@PathParam("id") int id, @QueryParam("token") String token) throws Exception {
         try {
+            this.loginService.verifyToken(token);
             playlistDAO.deletePlaylist(id);
             return Response
                     .status(Response.Status.OK)
@@ -112,7 +116,7 @@ public class PlaylistController {
                     .build();
         } catch (Exception e) {
             e.printStackTrace();
-            throw new BadRequestException();
+            throw e;
         }
     }
 
@@ -120,18 +124,17 @@ public class PlaylistController {
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response editPlaylist(PlaylistDTO playlist, @PathParam("id") int id, @QueryParam("token") String token) {
+    public Response editPlaylist(PlaylistDTO playlist, @PathParam("id") int id, @QueryParam("token") String token) throws Exception {
         try {
             this.loginService.verifyToken(token);
-            playlistDAO.editPlaylistName(playlist);
+            playlistDAO.editPlaylistName(playlist, id);
             return Response
                     .status(Response.Status.OK)
                     .entity(playlistDAO.getAllPlaylists(token))
                     .build();
         } catch (Exception e) {
             e.printStackTrace();
-            throw new BadRequestException();
+            throw e;
         }
     }
-
 }
