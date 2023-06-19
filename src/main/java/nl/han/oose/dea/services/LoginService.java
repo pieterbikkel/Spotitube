@@ -17,26 +17,31 @@ public class LoginService {
         try {
             if (loginDAO.userExists(loginRequestDTO)) {
                 var token = generateToken();
-                loginDAO.generateToken(loginRequestDTO, token);
-                var loginResponseDTO = new LoginResponseDTO(loginRequestDTO.getUser(), token);
-                return Response
-                        .status(Response.Status.OK)
-                        .entity(loginResponseDTO)
-                        .build();
+                loginDAO.updateToken(loginRequestDTO, token);
+                return buildSuccessResponse(loginRequestDTO.getUser(), token);
             } else {
                 throw new InvalidCredentialsException();
             }
+        } catch (InvalidCredentialsException e) {
+            throw e;
         } catch (Exception e) {
-            e.printStackTrace();
             throw new BadRequestException();
         }
+    }
+
+    public Response buildSuccessResponse(String user, String token) {
+        var loginResponseDTO = new LoginResponseDTO(user, token);
+        return Response
+                .status(Response.Status.OK)
+                .entity(loginResponseDTO)
+                .build();
     }
 
     public void verifyToken(String token) throws Exception {
         loginDAO.verifyToken(token);
     }
 
-    private String generateToken() {
+    public String generateToken() {
         return UUID.randomUUID().toString();
     }
 

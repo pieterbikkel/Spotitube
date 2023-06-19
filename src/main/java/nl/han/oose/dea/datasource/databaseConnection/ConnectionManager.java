@@ -15,7 +15,7 @@ public class ConnectionManager {
         return connection;
     }
 
-    public void initConnection() {
+    public void startConnection() {
         try {
             Class.forName(databaseProperties.driverString());
             connection = DriverManager.getConnection(databaseProperties.connectionString());
@@ -25,7 +25,7 @@ public class ConnectionManager {
         }
     }
 
-    public void closeConnection() {
+    public void stopConnection() {
         try {
             connection.close();
         } catch (Exception e) {

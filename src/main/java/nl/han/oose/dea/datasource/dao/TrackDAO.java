@@ -14,22 +14,22 @@ public class TrackDAO {
     @Inject
     private ConnectionManager connectionManager;
     public TracksResponseDTO getAllTracksFromPlaylist(int playlistId) throws SQLException {
-        connectionManager.initConnection();
+        connectionManager.startConnection();
         var sql = "SELECT * FROM track WHERE trackId IN (SELECT trackID FROM PlaylistTrack WHERE playlistId = ?)";
         var preparedStatement = connectionManager.getConnection().prepareStatement(sql);
         preparedStatement.setInt(1, playlistId);
         TracksResponseDTO tracks = mapToTracks(preparedStatement.executeQuery());
-        connectionManager.closeConnection();
+        connectionManager.stopConnection();
         return tracks;
     }
 
     public TracksResponseDTO getAllTracksNotInPlaylist(int playlistId) throws SQLException {
-        connectionManager.initConnection();
+        connectionManager.startConnection();
         var sql = "SELECT * FROM track WHERE trackId NOT IN (SELECT trackID FROM PlaylistTrack WHERE playlistId = ?);";
         var preparedStatement = connectionManager.getConnection().prepareStatement(sql);
         preparedStatement.setInt(1, playlistId);
         var tracks = mapToTracks(preparedStatement.executeQuery());
-        connectionManager.closeConnection();
+        connectionManager.stopConnection();
         return tracks;
     }
 
@@ -55,22 +55,22 @@ public class TrackDAO {
     }
 
     public void deleteTrackFromPlaylist(int playlistId, int trackId) throws SQLException {
-        connectionManager.initConnection();
+        connectionManager.startConnection();
         var sql = "DELETE FROM PlaylistTrack WHERE playlistId = ? AND trackId = ?;";
         var stmt = connectionManager.getConnection().prepareStatement(sql);
         stmt.setInt(1, playlistId);
         stmt.setInt(2, trackId);
         stmt.executeUpdate();
-        connectionManager.closeConnection();
+        connectionManager.stopConnection();
     }
 
     public void addTrackToPlaylist(int playlistId, TrackResponseDTO track) throws SQLException {
-        connectionManager.initConnection();
+        connectionManager.startConnection();
         var sql = "INSERT INTO PlaylistTrack (playlistId, trackId) VALUES (?, ?);";
         var preparedStatement = connectionManager.getConnection().prepareStatement(sql);
         preparedStatement.setInt(1, playlistId);
         preparedStatement.setInt(2, track.getId());
         preparedStatement.executeUpdate();
-        connectionManager.closeConnection();
+        connectionManager.stopConnection();
     }
 }

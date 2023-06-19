@@ -10,48 +10,47 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.logging.Level;
 
 public class PlaylistDAO {
     @Inject
     private ConnectionManager connectionService;
 
     public PlaylistsResponseDTO getAllPlaylists(String token) throws SQLException {
-        connectionService.initConnection();
+        connectionService.startConnection();
         var sql = "";
         ArrayList<PlaylistDTO> playlists = queryPlaylists(token);
         int playlistLength = calculateLength(playlists);
-        connectionService.closeConnection();
+        connectionService.stopConnection();
         return new PlaylistsResponseDTO(playlists, playlistLength);
     }
 
     public void editPlaylistName(PlaylistDTO playlist, int id) throws SQLException {
-        connectionService.initConnection();
+        connectionService.startConnection();
         var sql = "UPDATE playlist SET naam = ? WHERE playlistId = ?;";
         var preparedStatement = connectionService.getConnection().prepareStatement(sql);
         preparedStatement.setString(1, playlist.getName());
         preparedStatement.setInt(2, id);
         preparedStatement.executeUpdate();
-        connectionService.closeConnection();
+        connectionService.stopConnection();
     }
 
     public void addPlaylist(String token, PlaylistDTO playlistDTO) throws SQLException {
-        connectionService.initConnection();
+        connectionService.startConnection();
         var sql = "INSERT INTO playlist (naam, eigenaar) VALUES (?, (SELECT eigenaarId FROM eigenaar WHERE token = ?))";
         var preparedStatement = connectionService.getConnection().prepareStatement(sql);
         preparedStatement.setString(1, playlistDTO.getName());
         preparedStatement.setString(2, token);
         preparedStatement.executeUpdate();
-        connectionService.closeConnection();
+        connectionService.stopConnection();
     }
 
     public void deletePlaylist(int id) throws SQLException {
-        connectionService.initConnection();
+        connectionService.startConnection();
         var sql = "DELETE FROM playlist WHERE playlistId = ?;";
         var stmt = connectionService.getConnection().prepareStatement(sql);
         stmt.setInt(1, id);
         stmt.executeUpdate();
-        connectionService.closeConnection();
+        connectionService.stopConnection();
     }
 
     private ArrayList<PlaylistDTO> queryPlaylists(String token) throws SQLException {
@@ -78,7 +77,7 @@ public class PlaylistDAO {
 
         for (PlaylistDTO playlist : playlists) {
 
-            connectionService.initConnection();
+            connectionService.startConnection();
             PreparedStatement statement = connectionService.getConnection().prepareStatement("SELECT SUM(t.afspeelduur) AS `afspeelduur` FROM track t INNER JOIN PlaylistTrack PT ON PT.trackId = t.trackId WHERE PT.playlistId = ?");
             statement.setInt(1, playlist.getId());
             ResultSet result = statement.executeQuery();
