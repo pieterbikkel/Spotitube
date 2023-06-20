@@ -1,14 +1,12 @@
 package nl.han.oose.dea.controllers.dto;
 
-import nl.han.oose.dea.controllers.dto.response.TrackResponseDTO;
-
 import java.util.ArrayList;
 
 public class PlaylistDTO {
     private int id;
     private String name;
     private boolean owner;
-    private ArrayList<TrackResponseDTO> tracks;
+    private ArrayList<TrackDTO> tracks;
 
     public PlaylistDTO() {
     }
@@ -43,11 +41,11 @@ public class PlaylistDTO {
         this.owner = owner;
     }
 
-    public ArrayList<TrackResponseDTO> getTracks() {
+    public ArrayList<TrackDTO> getTracks() {
         return tracks;
     }
 
-    public void setTracks(ArrayList<TrackResponseDTO> tracks) {
+    public void setTracks(ArrayList<TrackDTO> tracks) {
         this.tracks = tracks;
     }
 }

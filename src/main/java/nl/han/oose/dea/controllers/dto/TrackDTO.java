@@ -1,22 +1,22 @@
-package nl.han.oose.dea.controllers.dto.response;
+package nl.han.oose.dea.controllers.dto;
 
-public class TrackResponseDTO {
+public class TrackDTO {
     private int id, duration, playcount;
     private String title, performer, album, publicationDate, description;
     private boolean offlineAvailable;
 
-    public TrackResponseDTO() {
+    public TrackDTO() {
     }
 
-    public TrackResponseDTO(int id,
-                            int duration,
-                            int playcount,
-                            String title,
-                            String performer,
-                            String album,
-                            String publicationDate,
-                            String description,
-                            boolean offlineAvailable) {
+    public TrackDTO(int id,
+                    int duration,
+                    int playcount,
+                    String title,
+                    String performer,
+                    String album,
+                    String publicationDate,
+                    String description,
+                    boolean offlineAvailable) {
         this.id = id;
         this.duration = duration;
         this.playcount = playcount;

@@ -6,6 +6,7 @@ import jakarta.ws.rs.core.Response;
 import nl.han.oose.dea.controllers.dto.request.LoginRequestDTO;
 import nl.han.oose.dea.controllers.dto.response.LoginResponseDTO;
 import nl.han.oose.dea.datasource.dao.LoginDAO;
+import nl.han.oose.dea.datasource.exceptions.ForbiddenResourceException;
 import nl.han.oose.dea.datasource.exceptions.InvalidCredentialsException;
 import java.util.UUID;
 
@@ -37,7 +38,7 @@ public class LoginService {
                 .build();
     }
 
-    public void verifyToken(String token) throws Exception {
+    public void verifyToken(String token) throws ForbiddenResourceException {
         loginDAO.verifyToken(token);
     }
 

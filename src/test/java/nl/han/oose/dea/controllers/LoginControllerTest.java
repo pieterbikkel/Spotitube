@@ -3,14 +3,12 @@ package nl.han.oose.dea.controllers;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.core.Response;
 import nl.han.oose.dea.controllers.dto.request.LoginRequestDTO;
-import nl.han.oose.dea.controllers.dto.response.LoginResponseDTO;
 import nl.han.oose.dea.datasource.exceptions.InvalidCredentialsException;
 import nl.han.oose.dea.services.LoginService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 

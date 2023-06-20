@@ -33,21 +33,25 @@ public class LoginDAO {
         return userExists;
     }
 
-    public void verifyToken(String token) throws Exception {
+    public void verifyToken(String token) throws ForbiddenResourceException {
+        try {
+            connectionManager.startConnection();
+            PreparedStatement statement = connectionManager.getConnection().prepareStatement("SELECT token FROM eigenaar WHERE token = ?");
+            statement.setString(1, token);
+            ResultSet result = statement.executeQuery();
 
-        connectionManager.startConnection();
-        PreparedStatement statement = connectionManager.getConnection().prepareStatement("SELECT token FROM eigenaar WHERE token = ?");
-        statement.setString(1, token);
-        ResultSet result = statement.executeQuery();
-
-        if (!result.isBeforeFirst()) {
+            if (!result.isBeforeFirst()) {
+                throw new ForbiddenResourceException();
+            }
+            connectionManager.stopConnection();
+        } catch (Exception e) {
             throw new ForbiddenResourceException();
         }
-        connectionManager.stopConnection();
+
 
     }
 
-    private boolean getResults(ResultSet rs) throws Exception {
+    public boolean getResults(ResultSet rs) throws Exception {
         int nResults = 0;
         while (rs.next()) {
             nResults += 1;
@@ -55,14 +59,11 @@ public class LoginDAO {
         return nResults == 1;
     }
 
-    private String stringToHash(String string) {
+    public String stringToHash(String string) {
         return DigestUtils.sha256Hex(string);
     }
 
-    private ResultSet getUser(LoginRequestDTO loginRequestDTO) throws Exception {
-        var sql = "SELECT 1 FROM eigenaar WHERE gebruikersnaam = ?;";
-        var preparedStatement = connectionManager.getConnection().prepareStatement(sql);
-        preparedStatement.setString(1, loginRequestDTO.getUser());
-        return preparedStatement.executeQuery();
-    }
+    @Inject
+    public void setConnectionManager(ConnectionManager connectionManager)
+    { this.connectionManager = connectionManager; }
 }

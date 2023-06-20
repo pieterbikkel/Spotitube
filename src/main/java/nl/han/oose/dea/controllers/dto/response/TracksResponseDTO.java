@@ -1,22 +1,24 @@
 package nl.han.oose.dea.controllers.dto.response;
 
+import nl.han.oose.dea.controllers.dto.TrackDTO;
+
 import java.util.ArrayList;
 
 public class TracksResponseDTO {
-    private ArrayList<TrackResponseDTO> tracks = new ArrayList<>();
+    private ArrayList<TrackDTO> tracks = new ArrayList<>();
 
     public TracksResponseDTO() {
     }
 
-    public TracksResponseDTO(ArrayList<TrackResponseDTO> tracks) {
+    public TracksResponseDTO(ArrayList<TrackDTO> tracks) {
         this.tracks = tracks;
     }
 
-    public ArrayList<TrackResponseDTO> getTracks() {
+    public ArrayList<TrackDTO> getTracks() {
         return tracks;
     }
 
-    public void setTracks(ArrayList<TrackResponseDTO> tracks) {
+    public void setTracks(ArrayList<TrackDTO> tracks) {
         this.tracks = tracks;
     }
 }

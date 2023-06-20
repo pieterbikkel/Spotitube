@@ -1,7 +1,7 @@
 package nl.han.oose.dea.datasource.dao;
 
 import jakarta.inject.Inject;
-import nl.han.oose.dea.controllers.dto.response.TrackResponseDTO;
+import nl.han.oose.dea.controllers.dto.TrackDTO;
 import nl.han.oose.dea.controllers.dto.response.TracksResponseDTO;
 import nl.han.oose.dea.datasource.databaseConnection.ConnectionManager;
 
@@ -33,8 +33,8 @@ public class TrackDAO {
         return tracks;
     }
 
-    private TracksResponseDTO mapToTracks(ResultSet rs) throws SQLException {
-        var tracks = new ArrayList<TrackResponseDTO>();
+    public TracksResponseDTO mapToTracks(ResultSet rs) throws SQLException {
+        var tracks = new ArrayList<TrackDTO>();
 
         while (rs.next()) {
             int id = rs.getInt("trackId");
@@ -47,7 +47,7 @@ public class TrackDAO {
             String description = rs.getString("beschrijving");
             boolean offlineAvailable = rs.getBoolean("offlineAvailable");
 
-            TrackResponseDTO track = new TrackResponseDTO(id, duration, playCount, title, performer, album, publicationDate, description, offlineAvailable);
+            TrackDTO track = new TrackDTO(id, duration, playCount, title, performer, album, publicationDate, description, offlineAvailable);
 
             tracks.add(track);
         }
@@ -64,7 +64,7 @@ public class TrackDAO {
         connectionManager.stopConnection();
     }
 
-    public void addTrackToPlaylist(int playlistId, TrackResponseDTO track) throws SQLException {
+    public void addTrackToPlaylist(int playlistId, TrackDTO track) throws SQLException {
         connectionManager.startConnection();
         var sql = "INSERT INTO PlaylistTrack (playlistId, trackId) VALUES (?, ?);";
         var preparedStatement = connectionManager.getConnection().prepareStatement(sql);
@@ -72,5 +72,10 @@ public class TrackDAO {
         preparedStatement.setInt(2, track.getId());
         preparedStatement.executeUpdate();
         connectionManager.stopConnection();
+    }
+
+    @Inject
+    public void setConnectionManager(ConnectionManager connectionManager) {
+        this.connectionManager = connectionManager;
     }
 }
