@@ -71,7 +71,7 @@ public class PlaylistDAOTest {
     @Test
     void deletePlaylistQueryTest() {
         try {
-            doThrow(Exception.class).when(connectionManager).initConnection();
+            doThrow(Exception.class).when(connectionManager).startConnection();
 
             Assertions.assertThrows(Exception.class, () -> sut.deletePlaylist(PLAYLIST_ID));
         } catch(Exception e) {
@@ -81,7 +81,7 @@ public class PlaylistDAOTest {
     @Test
     void calculateLengthQueryTest() {
         try {
-            doThrow(Exception.class).when(connectionManager).initConnection();
+            doThrow(Exception.class).when(connectionManager).startConnection();
 
             Assertions.assertThrows(Exception.class, () -> sut.calculateLength(playlists));
         } catch(Exception e) {

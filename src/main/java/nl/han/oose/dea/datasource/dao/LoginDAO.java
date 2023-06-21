@@ -15,7 +15,7 @@ public class LoginDAO {
 
     public void updateToken(LoginRequestDTO loginRequestDTO, String token) throws Exception {
         connectionManager.startConnection();
-        var sql = "UPDATE eigenaar SET token = ? WHERE gebruikersnaam = ?;";
+        var sql = "UPDATE owner SET token = ? WHERE username = ?;";
         var preparedStatement = connectionManager.getConnection().prepareStatement(sql);
         preparedStatement.setString(1, token);
         preparedStatement.setString(2, loginRequestDTO.getUser());
@@ -24,7 +24,7 @@ public class LoginDAO {
     }
     public boolean userExists(LoginRequestDTO loginRequestDTO) throws Exception {
         connectionManager.startConnection();
-        var sql = "SELECT * FROM eigenaar WHERE gebruikersnaam = ? AND wachtwoord = ?;";
+        var sql = "SELECT * FROM owner WHERE username = ? AND password = ?;";
         var preparedStatement = connectionManager.getConnection().prepareStatement(sql);
         preparedStatement.setString(1, loginRequestDTO.getUser());
         preparedStatement.setString(2, stringToHash(loginRequestDTO.getPassword()));
@@ -36,7 +36,7 @@ public class LoginDAO {
     public void verifyToken(String token) throws ForbiddenResourceException {
         try {
             connectionManager.startConnection();
-            PreparedStatement statement = connectionManager.getConnection().prepareStatement("SELECT token FROM eigenaar WHERE token = ?");
+            PreparedStatement statement = connectionManager.getConnection().prepareStatement("SELECT token FROM owner WHERE token = ?");
             statement.setString(1, token);
             ResultSet result = statement.executeQuery();
 

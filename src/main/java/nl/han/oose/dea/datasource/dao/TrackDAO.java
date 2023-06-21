@@ -15,7 +15,7 @@ public class TrackDAO {
     private ConnectionManager connectionManager;
     public TracksResponseDTO getAllTracksFromPlaylist(int playlistId) throws SQLException {
         connectionManager.startConnection();
-        var sql = "SELECT * FROM track WHERE trackId IN (SELECT trackID FROM PlaylistTrack WHERE playlistId = ?)";
+        var sql = "SELECT * FROM track WHERE track_id IN (SELECT track_id FROM PlaylistTrack WHERE playlist_id = ?)";
         var preparedStatement = connectionManager.getConnection().prepareStatement(sql);
         preparedStatement.setInt(1, playlistId);
         TracksResponseDTO tracks = mapToTracks(preparedStatement.executeQuery());
@@ -25,7 +25,7 @@ public class TrackDAO {
 
     public TracksResponseDTO getAllTracksNotInPlaylist(int playlistId) throws SQLException {
         connectionManager.startConnection();
-        var sql = "SELECT * FROM track WHERE trackId NOT IN (SELECT trackID FROM PlaylistTrack WHERE playlistId = ?);";
+        var sql = "SELECT * FROM track WHERE track_id NOT IN (SELECT track_id FROM PlaylistTrack WHERE playlist_id = ?);";
         var preparedStatement = connectionManager.getConnection().prepareStatement(sql);
         preparedStatement.setInt(1, playlistId);
         var tracks = mapToTracks(preparedStatement.executeQuery());
@@ -37,15 +37,15 @@ public class TrackDAO {
         var tracks = new ArrayList<TrackDTO>();
 
         while (rs.next()) {
-            int id = rs.getInt("trackId");
-            String title = rs.getString("titel");
+            int id = rs.getInt("track_id");
+            String title = rs.getString("title");
             String performer = rs.getString("performer");
-            int duration = rs.getInt("afspeelduur");
+            int duration = rs.getInt("duration");
             String album = rs.getString("album");
-            int playCount = rs.getInt("aantalKeerAfgespeeld");
-            String publicationDate = rs.getString("publicatieDatum");
-            String description = rs.getString("beschrijving");
-            boolean offlineAvailable = rs.getBoolean("offlineAvailable");
+            int playCount = rs.getInt("play_count");
+            String publicationDate = rs.getString("publication_date");
+            String description = rs.getString("track_description");
+            boolean offlineAvailable = rs.getBoolean("offline_available");
 
             TrackDTO track = new TrackDTO(id, duration, playCount, title, performer, album, publicationDate, description, offlineAvailable);
 
@@ -56,7 +56,7 @@ public class TrackDAO {
 
     public void deleteTrackFromPlaylist(int playlistId, int trackId) throws SQLException {
         connectionManager.startConnection();
-        var sql = "DELETE FROM PlaylistTrack WHERE playlistId = ? AND trackId = ?;";
+        var sql = "DELETE FROM PlaylistTrack WHERE playlist_id = ? AND track_id = ?;";
         var stmt = connectionManager.getConnection().prepareStatement(sql);
         stmt.setInt(1, playlistId);
         stmt.setInt(2, trackId);
@@ -66,7 +66,7 @@ public class TrackDAO {
 
     public void addTrackToPlaylist(int playlistId, TrackDTO track) throws SQLException {
         connectionManager.startConnection();
-        var sql = "INSERT INTO PlaylistTrack (playlistId, trackId) VALUES (?, ?);";
+        var sql = "INSERT INTO PlaylistTrack (playlist_id, track_id) VALUES (?, ?);";
         var preparedStatement = connectionManager.getConnection().prepareStatement(sql);
         preparedStatement.setInt(1, playlistId);
         preparedStatement.setInt(2, track.getId());

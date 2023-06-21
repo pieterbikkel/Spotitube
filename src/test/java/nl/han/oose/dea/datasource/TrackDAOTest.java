@@ -80,15 +80,15 @@ public class TrackDAOTest {
         var date = new  Date().toString();
 
         when(mockedResultSet.next()).thenReturn(true, true, false);
-        when(mockedResultSet.getInt("trackId")).thenReturn(1, 2);
-        when(mockedResultSet.getString("titel")).thenReturn("Track 1", "Track 2");
+        when(mockedResultSet.getInt("track_id")).thenReturn(1, 2);
+        when(mockedResultSet.getString("title")).thenReturn("Track 1", "Track 2");
         when(mockedResultSet.getString("performer")).thenReturn("Performer 1", "Performer 2");
-        when(mockedResultSet.getInt("afspeelduur")).thenReturn(180, 240);
+        when(mockedResultSet.getInt("duration")).thenReturn(180, 240);
         when(mockedResultSet.getString("album")).thenReturn("album 1", "album 2");
-        when(mockedResultSet.getInt("aantalKeerAfgespeeld")).thenReturn(1, 2);
-        when(mockedResultSet.getString("publicatieDatum")).thenReturn(date, date);
-        when(mockedResultSet.getString("beschrijving")).thenReturn("desc1", "desc2");
-        when(mockedResultSet.getBoolean("offlineAvailable")).thenReturn(false, true);
+        when(mockedResultSet.getInt("play_count")).thenReturn(1, 2);
+        when(mockedResultSet.getString("publication_date")).thenReturn(date, date);
+        when(mockedResultSet.getString("track_description")).thenReturn("desc1", "desc2");
+        when(mockedResultSet.getBoolean("offline_available")).thenReturn(false, true);
 
         // Step 3: Invoke the method being tested
 

@@ -38,6 +38,4 @@ public class ConnectionManager {
     public void setDatabaseProperties(DatabaseProperties databaseProperties)
     { this.databaseProperties = databaseProperties; }
 
-    public void initConnection() {
-    }
 }

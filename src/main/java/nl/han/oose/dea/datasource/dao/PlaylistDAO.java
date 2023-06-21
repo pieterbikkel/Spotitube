@@ -25,7 +25,7 @@ public class PlaylistDAO {
 
     public void editPlaylistName(PlaylistDTO playlist, int id) throws SQLException {
         connectionManager.startConnection();
-        var sql = "UPDATE playlist SET naam = ? WHERE playlistId = ?;";
+        var sql = "UPDATE playlist SET title = ? WHERE playlist_id = ?;";
         var preparedStatement = connectionManager.getConnection().prepareStatement(sql);
         preparedStatement.setString(1, playlist.getName());
         preparedStatement.setInt(2, id);
@@ -35,7 +35,7 @@ public class PlaylistDAO {
 
     public void addPlaylist(String token, PlaylistDTO playlistDTO) throws SQLException {
         connectionManager.startConnection();
-        var sql = "INSERT INTO playlist (naam, eigenaar) VALUES (?, (SELECT eigenaarId FROM eigenaar WHERE token = ?))";
+        var sql = "INSERT INTO playlist (title, playlist_owner) VALUES (?, (SELECT owner_id FROM owner WHERE token = ?))";
         var preparedStatement = connectionManager.getConnection().prepareStatement(sql);
         preparedStatement.setString(1, playlistDTO.getName());
         preparedStatement.setString(2, token);
@@ -45,7 +45,7 @@ public class PlaylistDAO {
 
     public void deletePlaylist(int id) throws SQLException {
         connectionManager.startConnection();
-        var sql = "DELETE FROM playlist WHERE playlistId = ?;";
+        var sql = "DELETE FROM playlist WHERE playlist_id = ?;";
         var preparedStatement = connectionManager.getConnection().prepareStatement(sql);
         preparedStatement.setInt(1, id);
         preparedStatement.executeUpdate();
@@ -54,14 +54,14 @@ public class PlaylistDAO {
 
     public ArrayList<PlaylistDTO> queryPlaylists(String token) throws SQLException {
         var playlists = new ArrayList<PlaylistDTO>();
-        var sql = "SELECT * FROM playlist p JOIN eigenaar e ON p.eigenaar = e.eigenaarId WHERE e.token = ?;";
+        var sql = "SELECT * FROM playlist p JOIN owner e ON p.playlist_owner = e.owner_id WHERE e.token = ?;";
         var preparedStatement = connectionManager.getConnection().prepareStatement(sql);
         preparedStatement.setString(1, token);
         ResultSet resultSet = preparedStatement.executeQuery();
 
         while (resultSet.next()) {
-            int id = resultSet.getInt("playlistId");
-            String name = resultSet.getString("naam");
+            int id = resultSet.getInt("playlist_id");
+            String name = resultSet.getString("title");
             String resultToken = resultSet.getString("token");
             Boolean isOwner = Objects.equals(token, resultToken);
             PlaylistDTO playlist = new PlaylistDTO(id, name, isOwner);
@@ -77,12 +77,12 @@ public class PlaylistDAO {
         for (PlaylistDTO playlist : playlists) {
 
             connectionManager.startConnection();
-            PreparedStatement statement = connectionManager.getConnection().prepareStatement("SELECT SUM(t.afspeelduur) AS `afspeelduur` FROM track t INNER JOIN PlaylistTrack PT ON PT.trackId = t.trackId WHERE PT.playlistId = ?");
+            PreparedStatement statement = connectionManager.getConnection().prepareStatement("SELECT SUM(t.duration) AS `playlist_duration` FROM track t INNER JOIN PlaylistTrack PT ON PT.track_id = t.track_id WHERE PT.playlist_id = ?");
             statement.setInt(1, playlist.getId());
             ResultSet result = statement.executeQuery();
 
             if (result.next()) {
-                duration += result.getInt("afspeelduur");
+                duration += result.getInt("playlist_duration");
             }
         }
 
